@@ -7,6 +7,7 @@ from bubbleSorts import bubbleSortV1, bubbleSortV2, bubbleSortV3, bubbleSortV4
 from insertionSorts import insertSortV1, insertSortV2
 from quickSorts import quickV1, quickV2
 from selectionSorts import selectV1
+from shellSorts import shellSortV1
 
 def measureSorts():
     rozsah = range(od, do + 1, krok)
@@ -66,6 +67,7 @@ funcList = [
     insertSortV1,
     insertSortV2,
     selectV1,
+    shellSortV1,
     quickV1,
     quickV2
 ]
