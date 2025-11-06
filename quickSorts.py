@@ -1,4 +1,5 @@
-def quickSortV1(lst, pocet=0):
+# verze V1 vybírají na místo pivota poslední člen listu a vytváří pomocné listy (horší časová složitost)
+def quickSortV1_1(lst, pocet=0):
     pocet = 0
 
     pocet += 1
@@ -29,12 +30,12 @@ def quickSortV1(lst, pocet=0):
     left = lst[:y]
     right = lst[y + 1:]
 
-    lstLeft, pocetLeft = quickSortV1(left, pocet)
-    lstRight, pocetRight = quickSortV1(right, pocet)
+    lstLeft, pocetLeft = quickSortV1_1(left, pocet)
+    lstRight, pocetRight = quickSortV1_1(right, pocet)
 
     return lstLeft + [pivot] + lstRight, pocet + pocetLeft + pocetRight
 
-def quickSortV2(lst, pocet=0):
+def quickSortV1_2(lst, pocet=0):
     pocet = 0
 
     pocet += 1
@@ -53,13 +54,101 @@ def quickSortV2(lst, pocet=0):
         else:
             right.append(lst[i])
 
-    lstLeft, pocetLeft = quickSortV2(left)
-    lstRight, pocetRight = quickSortV2(right)
+    lstLeft, pocetLeft = quickSortV1_2(left)
+    lstRight, pocetRight = quickSortV1_2(right)
 
     return lstLeft + [pivot] + lstRight, pocet + pocetLeft + pocetRight
 
-def quickV1(lst):
-    return quickSortV1(lst)[1]
+# tyhle funkce slouží ke vrácení pouze comparisons, protože potřebují rekurzivně přijímat listy
+def quickV1_1(lst):
+    return quickSortV1_1(lst)[1]
 
-def quickV2(lst):
-    return quickSortV2(lst)[1]
+def quickV1_2(lst):
+    return quickSortV1_2(lst)[1]
+
+# verze V2 nevytváří pomocné listy
+# verze V2_1 používá jako pivota poslední člen listu
+# verze V2_2 používá jako pivota prostřední člen listu
+def quickSortV2_1(lst, low=0, high=None, pocet=0):
+    pocet += pocet
+
+    pocet += 1
+    if high is None:
+        high = len(lst) - 1
+    
+    pocet += 1
+    if low < high:
+        pivotIndex, pct = partitionV1(lst, low, high)
+        pocet += pct
+        pocet += quickSortV2_1(lst, low, pivotIndex - 1)
+        pocet += quickSortV2_1(lst, pivotIndex + 1, high)
+
+    return pocet
+
+def partitionV1(lst, low, high, pocet=0):
+    i = low - 1
+    j = low
+
+    pivotIndex = high
+    pivot = lst[pivotIndex]
+
+    while True:
+        pocet += 1
+        if j == pivotIndex:
+            i += 1
+            lst[pivotIndex], lst[i] = lst[i], lst[pivotIndex]
+            break
+
+        pocet += 1
+        if lst[j] < pivot:
+            i += 1
+            lst[j], lst[i] = lst[i], lst[j]
+            j += 1
+        else:
+            j += 1
+
+    return i, pocet
+
+def quickSortV2_2(lst, low=0, high=None, pocet=0):
+    pocet += pocet
+
+    pocet += 1
+    if high is None:
+        high = len(lst) - 1
+
+    pocet += 1
+    if low < high:
+        mid, pct = partitionV2(lst, low, high)
+        pocet += pct
+        pocet += quickSortV2_2(lst, low, mid - 1)
+        pocet += quickSortV2_2(lst, mid, high)
+
+    return pocet
+
+def partitionV2(lst, low, high, pocet=0):
+    pivot = lst[(low + high) // 2]
+
+    i = low
+    j = high
+
+    pocet += 1
+    while j >= i:
+        pocet += 1
+
+        pocet += 1
+        while lst[i] < pivot:
+            pocet += 1
+            i += 1
+
+        pocet += 1
+        while lst[j] > pivot:
+            pocet += 1
+            j -= 1
+
+        pocet += 1
+        if i <= j:
+            lst[i], lst[j] = lst[j], lst[i]
+            i += 1
+            j -= 1
+
+    return i, pocet
